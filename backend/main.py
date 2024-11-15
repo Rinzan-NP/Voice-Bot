@@ -38,7 +38,7 @@ class Message(BaseModel):
 async def grok(msg: Message):
     try:
         
-        # Use the chat_completions API
+        # Creating client
         message = client.messages.create(
             model="grok-beta",
             max_tokens=128,
