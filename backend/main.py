@@ -6,20 +6,20 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+
 load_dotenv()
 
 app = FastAPI()
 
-# Configure CORS
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "*"
-    ],  # Allows all origins. Replace with specific domains in production
+    ], 
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods (GET, POST, OPTIONS, etc.)
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],  
+    allow_headers=["*"], 
 )
 
 # Load API key
