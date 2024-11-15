@@ -51,7 +51,7 @@ async def grok(msg: Message):
             ],
         )
         
-        return {"response": message.content}
+        return {"data": message.content[0]}
     except Exception as e:
         print(f"Error: {e}")
         raise HTTPException(status_code=500, detail="Error processing request.")

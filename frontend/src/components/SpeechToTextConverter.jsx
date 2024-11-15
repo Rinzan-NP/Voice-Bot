@@ -3,6 +3,7 @@ import SpeechRecognition, {
     useSpeechRecognition,
 } from "react-speech-recognition";
 import axios from "axios";
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 const SpeechToTextConverter = () => {
     const [inputText, setInputText] = useState("");
@@ -13,6 +14,7 @@ const SpeechToTextConverter = () => {
         resetTranscript,
         browserSupportsSpeechRecognition,
     } = useSpeechRecognition();
+	const { speak } = useSpeechSynthesis();
     const baseUrl = "http://127.0.0.1:8000";
 
     if (!browserSupportsSpeechRecognition) {
@@ -25,7 +27,9 @@ const SpeechToTextConverter = () => {
             const response = await axios.post(`${baseUrl}/api/grok/`, {
                 msg,
             });
-            console.log(response.data);
+            speak({text: response.data.data.text || "I'm sorry, I didn't understand that."} )
+			
+			return response.data.data.text || "I'm sorry, I didn't understand that.";
             
         } catch (error) {
             console.error("Error:", error.response?.data || error.message);
@@ -39,14 +43,14 @@ const SpeechToTextConverter = () => {
     }, [transcript, listening]);
 
     // Handler to send message
-    const handleSendMessage = () => {
+    const handleSendMessage =async() => {
         if (inputText.trim()) {
             // Add user message to the conversation
             const newMessage = { text: inputText, sender: "User" };
             setConversation((prev) => [...prev, newMessage]);
 
             // Generate and add the response
-            const botResponse = generateResponse(inputText);
+            const botResponse = await generateResponse(inputText);
             setTimeout(() => {
                 setConversation((prev) => [
                     ...prev,
